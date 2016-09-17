@@ -1,3 +1,3 @@
-# ufpt
+# Competitive Programming
 
 Notes and problems
