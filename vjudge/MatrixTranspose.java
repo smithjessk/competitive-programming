@@ -1,59 +1,50 @@
 // source: http://vjudge.net/contest/135420#problem/A
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class MatrixTranspose {
-    public static class Value {
-        int row;
-        int value;
-
-        Value(int r, int v) {
-            this.row = r;
-            this.value = v;
-        }
-    }
-
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        int m = in.nextInt();
-        int n = in.nextInt();
-        in.nextLine();
+        while (in.hasNextLine()) {
+            int m = in.nextInt();
+            int n = in.nextInt();
+            in.nextLine();
 
-        // Maintain hashmap between column and ADT holding class
-        // For each key in the hash, print out the key and then all the row indices
-        // Then print out a new line and then all the row values
-
-        // map of column to values
-        HashMap<Integer, ArrayList<Value>> hash = new HashMap<>();
-
-        for (int row = 1; row < m + 1; row++) {
-            String[] firstLineParts = in.nextLine().split(" ");
-            String[] secondLineParts = in.nextLine().split(" ");
-            for (int i = 1; i < firstLineParts.length; i++) {
-                int column = Integer.parseInt(firstLineParts[i]);
-                int value = Integer.parseInt(secondLineParts[i - 1]);
-                if (!hash.containsKey(column)) {
-                    hash.put(column, new ArrayList<>());
+            int[][] matrix = new int[m][n];
+            for (int row = 0; row < m; row++) {
+                String[] firstLineParts = in.nextLine().split(" ");
+                String[] secondLineParts = in.nextLine().split(" ");
+                for (int j = 1; j < firstLineParts.length; j++) {
+                    int col = Integer.parseInt(firstLineParts[j]) - 1;
+                    int value = Integer.parseInt(secondLineParts[j - 1]);
+                    matrix[row][col] = value;
                 }
-                hash.get(column).add(new Value(row, value));
             }
-        }
 
-        System.out.printf("%d %d\n", n, m);
-        for (int column = 1; column < n + 1; column++) {
-            if (!hash.containsKey(column)) {
-                System.out.println("0\n");
-            } else {
-                String firstOutputLine = hash.get(column).size() + " ";
-                String secondOutputLine = "";
-                for (Value v : hash.get(column)) {
-                    firstOutputLine += v.row + " ";
-                    secondOutputLine += v.value + " ";
+            System.out.printf("%d %d\n", n, m);
+            for (int col = 0; col < n; col++) {
+                ArrayList<Integer> nonZeroValues = new ArrayList<>();
+                ArrayList<Integer> nonZeroRows = new ArrayList<>();
+                for (int row = 0; row < m; row++) {
+                    if (matrix[row][col] != 0) {
+                        nonZeroRows.add(row + 1);
+                        nonZeroValues.add(matrix[row][col]);
+                    }
                 }
-                System.out.println(firstOutputLine.substring(0, firstOutputLine.length() - 1));
-                System.out.println(secondOutputLine.substring(0, secondOutputLine.length() - 1));
+                String firstLine = nonZeroRows.size() + "";
+                for (int index : nonZeroRows) {
+                    firstLine = firstLine + " " + index;
+                }
+                String secondLine = "";
+                for (int value : nonZeroValues) {
+                    secondLine = secondLine + " " + value;
+                }
+                System.out.println(firstLine);
+                if (secondLine.length() > 0) {
+                    secondLine = secondLine.substring(1);
+                }
+                System.out.println(secondLine);
             }
         }
     }

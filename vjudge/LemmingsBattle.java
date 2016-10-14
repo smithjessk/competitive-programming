@@ -32,13 +32,17 @@ public class LemmingsBattle {
             while (greenLemmings.size() > 0 && blueLemmings.size() > 0) {
                 int smallerArmySize = Math.min(greenLemmings.size(), blueLemmings.size());
                 int numBattles = Math.min(numBattlefields, smallerArmySize);
+                int[] bestGreen = new int[numBattles];
+                int[] bestBlue = new int[numBattles];
                 for (int i = 0; i < numBattles; i++) {
-                    int bestGreen = greenLemmings.poll();
-                    int bestBlue = blueLemmings.poll();
-                    if (bestGreen > bestBlue) {
-                        greenLemmings.add(bestGreen - bestBlue);
-                    } else if (bestBlue > bestGreen) {
-                        blueLemmings.add(bestBlue - bestGreen);
+                    bestBlue[i] = blueLemmings.poll();
+                    bestGreen[i] = greenLemmings.poll();
+                }
+                for (int i = 0; i < numBattles; i++) {
+                    if (bestGreen[i] > bestBlue[i]) {
+                        greenLemmings.add(bestGreen[i] - bestBlue[i]);
+                    } else if (bestBlue[i] > bestGreen[i]) {
+                        blueLemmings.add(bestBlue[i] - bestGreen[i]);
                     }
                 }
             }
@@ -47,14 +51,14 @@ public class LemmingsBattle {
                     System.out.println("green and blue died");
                 } else {
                     System.out.println("blue wins");
-                    for (int strength : blueLemmings) {
-                        System.out.println(strength);
+                    while (blueLemmings.size() > 0) {
+                        System.out.println(blueLemmings.poll());
                     }
                 }
             } else {
                 System.out.println("green wins");
-                for (int strength : greenLemmings) {
-                    System.out.println(strength);
+                while (greenLemmings.size() > 0) {
+                    System.out.println(greenLemmings.poll());
                 }
             }
             if (n > 0) {
